@@ -47,6 +47,26 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "burger-king": {
+          DEFAULT: "hsl(var(--burger-king))",
+          foreground: "hsl(var(--burger-king-foreground))",
+        },
+        mcdonalds: {
+          DEFAULT: "hsl(var(--mcdonalds))",
+          foreground: "hsl(var(--mcdonalds-foreground))",
+        },
+        starbucks: {
+          DEFAULT: "hsl(var(--starbucks))",
+          foreground: "hsl(var(--starbucks-foreground))",
+        },
+        lego: {
+          DEFAULT: "hsl(var(--lego))",
+          foreground: "hsl(var(--lego-foreground))",
+        },
+        "pet-store": {
+          DEFAULT: "hsl(var(--pet-store))",
+          foreground: "hsl(var(--pet-store-foreground))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -57,6 +77,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      backgroundImage: {
+        "gradient-rainbow": "var(--gradient-rainbow)",
+        "gradient-hero": "var(--gradient-hero)",
+        "gradient-card": "var(--gradient-card)",
+      },
+      boxShadow: {
+        colorful: "var(--shadow-colorful)",
+        card: "var(--shadow-card)",
       },
       borderRadius: {
         lg: "var(--radius)",
