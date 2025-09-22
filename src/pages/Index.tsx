@@ -2,6 +2,10 @@ import { Navigation } from "@/components/navigation";
 import { BusinessCard } from "@/components/ui/business-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "@/hooks/use-toast";
+import { superComboItems } from "@/data/businessData";
 import heroImage from "@/assets/hero-image.jpg";
 import petStoreImage from "@/assets/pet-store.jpg";
 import burgerKingImage from "@/assets/burger-king.jpg";
@@ -10,6 +14,33 @@ import starbucksImage from "@/assets/starbucks.jpg";
 import legoStoreImage from "@/assets/lego-store.jpg";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const { addItem } = useCart();
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleSuperCombo = () => {
+    superComboItems.forEach(item => {
+      addItem({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        business: item.business,
+        variant: item.variant
+      });
+    });
+    
+    toast({
+      title: "🎉 Super Combo Added!",
+      description: "All combo items have been added to your cart!",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -33,10 +64,19 @@ const Index = () => {
               we have everything you love all in one magical place!
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-pet-store text-pet-store-foreground hover:scale-105 transition-transform">
+              <Button 
+                size="lg" 
+                className="bg-pet-store text-pet-store-foreground hover:scale-105 transition-transform"
+                onClick={() => scrollToSection("pet-store")}
+              >
                 🐾 Explore Our Pet Store
               </Button>
-              <Button variant="outline" size="lg" className="hover:scale-105 transition-transform">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="hover:scale-105 transition-transform"
+                onClick={() => scrollToSection("burger-king")}
+              >
                 🍔 Check Out Our Food Courts
               </Button>
             </div>
@@ -60,6 +100,7 @@ const Index = () => {
                 image={petStoreImage}
                 items={["Dog Food & Treats", "Cat Toys & Beds", "Bird Cages", "Fish Tanks", "Hamster Wheels", "Pet Grooming"]}
                 variant="pet-store"
+                onClick={() => navigate("/business/pet-store")}
               />
             </div>
 
@@ -71,6 +112,7 @@ const Index = () => {
                 image={burgerKingImage}
                 items={["Whopper Burgers", "Crispy Fries", "Chicken Nuggets", "Milkshakes", "Crown Cookies", "King's Crowns"]}
                 variant="burger-king"
+                onClick={() => navigate("/business/burger-king")}
               />
             </div>
 
@@ -82,6 +124,7 @@ const Index = () => {
                 image={mcdonaldsImage}
                 items={["Happy Meals", "Big Mac", "Chicken McNuggets", "Apple Pies", "McFlurries", "Toy Surprises"]}
                 variant="mcdonalds"
+                onClick={() => navigate("/business/mcdonalds")}
               />
             </div>
 
@@ -93,6 +136,7 @@ const Index = () => {
                 image={starbucksImage}
                 items={["Hot Chocolate", "Frappuccinos", "Cake Pops", "Cookies", "Warm Milk", "Special Cups"]}
                 variant="starbucks"
+                onClick={() => navigate("/business/starbucks")}
               />
             </div>
 
@@ -104,6 +148,7 @@ const Index = () => {
                 image={legoStoreImage}
                 items={["Lego City Sets", "Star Wars Legos", "Friends Collection", "Build Tables", "Mini Figures", "Custom Creations"]}
                 variant="lego"
+                onClick={() => navigate("/business/lego")}
               />
             </div>
 
@@ -122,7 +167,10 @@ const Index = () => {
                   <div>☕ Kid's Drink</div>
                   <div>🎁 Surprise Gift</div>
                 </div>
-                <Button className="mt-4 w-full bg-gradient-rainbow text-white border-0">
+                <Button 
+                  className="mt-4 w-full bg-gradient-rainbow text-white border-0"
+                  onClick={handleSuperCombo}
+                >
                   Get Super Combo!
                 </Button>
               </CardContent>

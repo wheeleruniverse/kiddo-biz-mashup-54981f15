@@ -9,6 +9,7 @@ interface BusinessCardProps {
   items: string[];
   variant: "pet-store" | "burger-king" | "mcdonalds" | "starbucks" | "lego";
   className?: string;
+  onClick?: () => void;
 }
 
 const variantStyles = {
@@ -19,7 +20,7 @@ const variantStyles = {
   "lego": "bg-lego text-lego-foreground",
 };
 
-export function BusinessCard({ title, description, image, items, variant, className }: BusinessCardProps) {
+export function BusinessCard({ title, description, image, items, variant, className, onClick }: BusinessCardProps) {
   return (
     <Card className={cn("overflow-hidden shadow-card hover:shadow-colorful transition-all duration-300 hover:scale-105", className)}>
       <div className="relative h-48 overflow-hidden">
@@ -44,7 +45,10 @@ export function BusinessCard({ title, description, image, items, variant, classN
             </div>
           ))}
         </div>
-        <Button className={cn("w-full", variantStyles[variant])}>
+        <Button 
+          className={cn("w-full", variantStyles[variant])}
+          onClick={onClick}
+        >
           Visit {title}
         </Button>
       </CardContent>
