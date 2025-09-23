@@ -57,7 +57,7 @@ const Index = () => {
               />
             </div>
             <h1 className="text-6xl font-bold mb-6 bg-gradient-rainbow bg-clip-text text-transparent">
-              🐾 Amazing Pet Store & More! 🐾
+              <i className="material-icons text-4xl text-primary">pets</i> Amazing Pet Store & More! <i className="material-icons text-4xl text-primary">pets</i>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Welcome to the most amazing place on Earth! We're not just a pet store - 
@@ -69,7 +69,7 @@ const Index = () => {
                 className="bg-pet-store text-pet-store-foreground hover:scale-105 transition-transform"
                 onClick={() => scrollToSection("pet-store")}
               >
-                🐾 Explore Our Pet Store
+                <i className="material-icons text-2xl mr-2">pets</i> Explore Our Pet Store
               </Button>
               <Button 
                 variant="outline" 
@@ -77,7 +77,7 @@ const Index = () => {
                 className="hover:scale-105 transition-transform"
                 onClick={() => scrollToSection("burger-king")}
               >
-                🍔 Check Out Our Food Courts
+                <i className="material-icons text-2xl mr-2">restaurant</i> Check Out Our Food Courts
               </Button>
             </div>
           </div>
@@ -95,7 +95,7 @@ const Index = () => {
             {/* Pet Store */}
             <div id="pet-store">
               <BusinessCard
-                title="🐾 Pet Paradise"
+                title={<><i className="material-icons text-2xl mr-2">pets</i> Pet Paradise</>}
                 description="Everything your furry, feathered, and scaly friends need!"
                 image={petStoreImage}
                 items={["Dog Food & Treats", "Cat Toys & Beds", "Bird Cages", "Fish Tanks", "Hamster Wheels", "Pet Grooming"]}
@@ -119,7 +119,7 @@ const Index = () => {
             {/* McDonald's */}
             <div id="mcdonalds">
               <BusinessCard
-                title="🍟 McDonald's Cafe"
+                title={<><i className="material-icons text-2xl mr-2">fastfood</i> McDonald's Cafe</>}
                 description="I'm lovin' it! Happy meals and golden treats!"
                 image={mcdonaldsImage}
                 items={["Happy Meals", "Big Mac", "Chicken McNuggets", "Apple Pies", "McFlurries", "Toy Surprises"]}
@@ -131,7 +131,7 @@ const Index = () => {
             {/* Starbucks */}
             <div id="starbucks">
               <BusinessCard
-                title="☕ Starbucks Corner"
+                title={<><i className="material-icons text-2xl mr-2">local_cafe</i> Starbucks Corner</>}
                 description="Kid-friendly drinks and cozy treats!"
                 image={starbucksImage}
                 items={["Hot Chocolate", "Frappuccinos", "Cake Pops", "Cookies", "Warm Milk", "Special Cups"]}
@@ -143,7 +143,7 @@ const Index = () => {
             {/* Lego Store */}
             <div id="lego">
               <BusinessCard
-                title="🧱 Lego Wonderland"
+                title={<><i className="material-icons text-2xl mr-2">toys</i> Lego Wonderland</>}
                 description="Build your dreams with endless possibilities!"
                 image={legoStoreImage}
                 items={["Lego City Sets", "Star Wars Legos", "Friends Collection", "Build Tables", "Mini Figures", "Custom Creations"]}
@@ -155,16 +155,16 @@ const Index = () => {
             {/* Special Combo Section */}
             <Card className="bg-gradient-card shadow-colorful hover:scale-105 transition-all duration-300">
               <CardContent className="p-6 text-center">
-                <div className="text-6xl mb-4">🎉</div>
+                <div className="text-6xl mb-4 text-primary"><i className="material-icons">celebration</i></div>
                 <h3 className="text-2xl font-bold mb-4">Super Combo Deal!</h3>
                 <p className="text-muted-foreground mb-4">
                   Get a pet toy, a burger, some Legos, and a drink all together!
                 </p>
                 <div className="space-y-2 text-sm">
-                  <div>🐾 1 Pet Toy</div>
-                  <div>🍔 1 Kids Meal</div>
-                  <div>🧱 Small Lego Set</div>
-                  <div>☕ Kid's Drink</div>
+                  <div><i className='material-icons text-lg mr-2'>pets</i> 1 Pet Toy</div>
+                  <div><i className='material-icons text-lg mr-2'>restaurant</i> 1 Kids Meal</div>
+                  <div><i className='material-icons text-lg mr-2'>toys</i> Small Lego Set</div>
+                  <div><i className='material-icons text-lg mr-2'>local_cafe</i> Kid's Drink</div>
                   <div>🎁 Surprise Gift</div>
                 </div>
                 <Button 
@@ -183,33 +183,33 @@ const Index = () => {
       <section className="py-16 bg-gradient-hero">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-12 text-foreground">
-            🌟 Amazing Fun Facts! 🌟
+            <i className="material-icons text-4xl text-yellow-500">star</i> Amazing Fun Facts! <i className="material-icons text-4xl text-yellow-500">star</i>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl mb-2">🐕</div>
+                <div className="text-4xl mb-2 text-pet-store"><i className="material-icons">pets</i></div>
                 <div className="text-2xl font-bold text-pet-store">500+</div>
                 <div className="text-sm text-muted-foreground">Happy Pets Served</div>
               </CardContent>
             </Card>
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl mb-2">🍔</div>
+                <div className="text-4xl mb-2 text-burger-king"><i className="material-icons">restaurant</i></div>
                 <div className="text-2xl font-bold text-burger-king">1000+</div>
                 <div className="text-sm text-muted-foreground">Burgers Made</div>
               </CardContent>
             </Card>
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl mb-2">🧱</div>
+                <div className="text-4xl mb-2 text-lego"><i className="material-icons">toys</i></div>
                 <div className="text-2xl font-bold text-lego">10,000+</div>
                 <div className="text-sm text-muted-foreground">Lego Pieces</div>
               </CardContent>
             </Card>
             <Card className="bg-card/80 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <div className="text-4xl mb-2">☕</div>
+                <div className="text-4xl mb-2 text-starbucks"><i className="material-icons">local_cafe</i></div>
                 <div className="text-2xl font-bold text-starbucks">200+</div>
                 <div className="text-sm text-muted-foreground">Drinks Served</div>
               </CardContent>
@@ -221,13 +221,19 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-12 bg-foreground text-background">
         <div className="container mx-auto px-4 text-center">
-          <div className="text-4xl mb-4">🐾🍔🧱☕🍟</div>
+          <div className="text-4xl mb-4 text-primary flex justify-center space-x-2">
+            <i className="material-icons">pets</i>
+            <i className="material-icons">restaurant</i>
+            <i className="material-icons">toys</i>
+            <i className="material-icons">local_cafe</i>
+            <i className="material-icons">fastfood</i>
+          </div>
           <h3 className="text-2xl font-bold mb-4">Amazing Pet Store & More!</h3>
           <p className="text-background/80 mb-4">
             The most magical place where pets, food, toys, and fun all come together!
           </p>
           <p className="text-background/60 text-sm">
-            Made with ❤️ for the most creative business idea ever!
+            Made with <i className="material-icons text-red-500">favorite</i> for the most creative business idea ever!
           </p>
         </div>
       </footer>

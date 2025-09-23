@@ -5,12 +5,12 @@ import { CartDrawer } from "@/components/ui/cart-drawer";
 import { useState } from "react";
 
 const navigationItems = [
-  { id: "hero", label: "Home", icon: "🏠" },
-  { id: "pet-store", label: "Pet Store", icon: "🐾" },
-  { id: "burger-king", label: "Burger King", icon: "👑" },
-  { id: "mcdonalds", label: "McDonald's", icon: "🍟" },
-  { id: "starbucks", label: "Starbucks", icon: "☕" },
-  { id: "lego", label: "Lego Store", icon: "🧱" },
+  { id: "hero", label: "Home", icon: "home" },
+  { id: "pet-store", label: "Pet Store", icon: "pets" },
+  { id: "burger-king", label: "Burger King", icon: "restaurant" },
+  { id: "mcdonalds", label: "McDonald's", icon: "fastfood" },
+  { id: "starbucks", label: "Starbucks", icon: "local_cafe" },
+  { id: "lego", label: "Lego Store", icon: "toys" },
 ];
 
 export function Navigation() {
@@ -29,7 +29,7 @@ export function Navigation() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-2xl">🐾</span>
+            <i className="material-icons text-2xl text-primary">pets</i>
             <span className="font-bold text-xl bg-gradient-rainbow bg-clip-text text-transparent">
               Amazing Pet Store & More!
             </span>
@@ -44,7 +44,7 @@ export function Navigation() {
                   onClick={() => scrollToSection(item.id)}
                   className="text-sm hover:bg-accent"
                 >
-                  <span className="mr-1">{item.icon}</span>
+                  <i className="material-icons mr-1 text-sm">{item.icon}</i>
                   {item.label}
                 </Button>
               ))}

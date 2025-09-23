@@ -44,7 +44,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
         <DrawerHeader className="border-b border-border">
           <div className="flex items-center justify-between">
             <DrawerTitle className="text-xl font-bold">
-              🛒 Shopping Cart ({state.itemCount} items)
+              <i className="material-icons text-xl mr-2">shopping_cart</i> Shopping Cart ({state.itemCount} items)
             </DrawerTitle>
             <DrawerClose asChild>
               <Button variant="ghost" size="icon">
@@ -121,7 +121,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                 Clear Cart
               </Button>
               <Button onClick={handleCheckout} className="flex-1 bg-primary text-primary-foreground">
-                Pretend Checkout 🎉
+                <i className="material-icons mr-2">celebration</i> Pretend Checkout
               </Button>
             </div>
           </div>
