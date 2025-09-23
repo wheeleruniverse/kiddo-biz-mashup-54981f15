@@ -3,6 +3,8 @@ import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { CartDrawer } from "@/components/ui/cart-drawer";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { STORE_NAME } from "@/constants/app";
 
 const navigationItems = [
   { id: "hero", label: "Home", icon: "home" },
@@ -16,11 +18,13 @@ const navigationItems = [
 export function Navigation() {
   const { state } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+  const handleNavigation = (id: string) => {
+    if (id === "hero") {
+      navigate("/");
+    } else {
+      navigate(`/business/${id}`);
     }
   };
 
@@ -31,7 +35,7 @@ export function Navigation() {
           <div className="flex items-center space-x-2">
             <i className="material-icons text-2xl text-primary">pets</i>
             <span className="font-bold text-xl bg-gradient-rainbow bg-clip-text text-transparent">
-              Amazing Pet Store & More!
+              {STORE_NAME}
             </span>
           </div>
           <div className="flex items-center space-x-2">
@@ -41,7 +45,7 @@ export function Navigation() {
                   key={item.id}
                   variant="ghost"
                   size="sm"
-                  onClick={() => scrollToSection(item.id)}
+                  onClick={() => handleNavigation(item.id)}
                   className="text-sm hover:bg-accent"
                 >
                   <i className="material-icons mr-1 text-sm">{item.icon}</i>

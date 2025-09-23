@@ -35,7 +35,7 @@ export function BusinessCard({ title, description, image, items, variant, classN
         </CardTitle>
       </div>
       <CardHeader>
-        <p className="text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground h-12 flex items-center">{description}</p>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-2">

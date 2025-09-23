@@ -1,3 +1,5 @@
+import { STORE_NAME_SHORT } from "@/constants/app";
+
 export interface Product {
   id: string;
   name: string;
@@ -17,7 +19,7 @@ export interface Business {
 export const businessData: Business[] = [
   {
     id: "pet-store",
-    name: "Amazing Pet Store",
+    name: STORE_NAME_SHORT,
     description: "Everything your furry, feathered, and finned friends need!",
     image: "/src/assets/pet-store.jpg",
     variant: "pet-store",
@@ -93,7 +95,7 @@ export const businessData: Business[] = [
 ];
 
 export const superComboItems = [
-  { id: "combo-1", name: "Dog Treats", price: 5, business: "Amazing Pet Store", variant: "pet-store" as const },
+  { id: "combo-1", name: "Dog Treats", price: 5, business: STORE_NAME_SHORT, variant: "pet-store" as const },
   { id: "combo-2", name: "Whopper Meal", price: 7, business: "Burger King", variant: "burger-king" as const },
   { id: "combo-3", name: "Happy Meal", price: 6, business: "McDonald's", variant: "mcdonalds" as const },
   { id: "combo-4", name: "Hot Chocolate", price: 4, business: "Starbucks", variant: "starbucks" as const },

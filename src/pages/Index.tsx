@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import { superComboItems } from "@/data/businessData";
+import { STORE_NAME } from "@/constants/app";
 import heroImage from "@/assets/hero-image.jpg";
 import petStoreImage from "@/assets/pet-store.jpg";
 import burgerKingImage from "@/assets/burger-king.jpg";
@@ -52,12 +53,12 @@ const Index = () => {
             <div className="mb-8">
               <img 
                 src={heroImage} 
-                alt="Amazing Pet Store and More" 
+                alt={`${STORE_NAME} and More`} 
                 className="w-full h-96 object-cover rounded-2xl shadow-colorful"
               />
             </div>
             <h1 className="text-6xl font-bold mb-6 bg-gradient-rainbow bg-clip-text text-transparent">
-              <i className="material-icons text-4xl text-primary">pets</i> Amazing Pet Store & More! <i className="material-icons text-4xl text-primary">pets</i>
+              <i className="material-icons text-4xl text-primary">pets</i> {STORE_NAME} <i className="material-icons text-4xl text-primary">pets</i>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Welcome to the most amazing place on Earth! We're not just a pet store - 
@@ -153,25 +154,32 @@ const Index = () => {
             </div>
 
             {/* Special Combo Section */}
-            <Card className="bg-gradient-card shadow-colorful hover:scale-105 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="text-6xl mb-4 text-primary"><i className="material-icons">celebration</i></div>
-                <h3 className="text-2xl font-bold mb-4">Super Combo Deal!</h3>
-                <p className="text-muted-foreground mb-4">
+            <Card className="bg-gradient-card shadow-colorful hover:scale-105 transition-all duration-300 overflow-hidden">
+              <div className="relative h-48 overflow-hidden bg-gradient-to-br from-purple-500 via-pink-500 to-yellow-500">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute bottom-4 left-4 text-white">
+                  <div className="flex items-center mb-2">
+                    <i className="material-icons text-3xl mr-2">celebration</i>
+                    <h3 className="text-2xl font-bold">Super Combo Deal!</h3>
+                  </div>
+                </div>
+              </div>
+              <CardContent className="p-6">
+                <p className="text-muted-foreground mb-4 h-12 flex items-center">
                   Get a pet toy, a burger, some Legos, and a drink all together!
                 </p>
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-sm mb-4">
                   <div><i className='material-icons text-lg mr-2'>pets</i> 1 Pet Toy</div>
                   <div><i className='material-icons text-lg mr-2'>restaurant</i> 1 Kids Meal</div>
                   <div><i className='material-icons text-lg mr-2'>toys</i> Small Lego Set</div>
                   <div><i className='material-icons text-lg mr-2'>local_cafe</i> Kid's Drink</div>
-                  <div>🎁 Surprise Gift</div>
+                  <div><i className='material-icons text-lg mr-2'>card_giftcard</i> Surprise Gift</div>
                 </div>
                 <Button 
-                  className="mt-4 w-full bg-gradient-rainbow text-white border-0"
+                  className="w-full bg-gradient-rainbow text-white border-0"
                   onClick={handleSuperCombo}
                 >
-                  Get Super Combo!
+                  <i className="material-icons mr-2">celebration</i> Get Super Combo!
                 </Button>
               </CardContent>
             </Card>
@@ -228,7 +236,7 @@ const Index = () => {
             <i className="material-icons">local_cafe</i>
             <i className="material-icons">fastfood</i>
           </div>
-          <h3 className="text-2xl font-bold mb-4">Amazing Pet Store & More!</h3>
+          <h3 className="text-2xl font-bold mb-4">{STORE_NAME}</h3>
           <p className="text-background/80 mb-4">
             The most magical place where pets, food, toys, and fun all come together!
           </p>
