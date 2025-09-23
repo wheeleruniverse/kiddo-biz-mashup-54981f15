@@ -96,7 +96,8 @@ const Index = () => {
             {/* Pet Store */}
             <div id="pet-store">
               <BusinessCard
-                title={<><i className="material-icons text-2xl mr-2">pets</i> Pet Paradise</>}
+                title="Pet Paradise"
+                icon="pets"
                 description="Everything your furry, feathered, and scaly friends need!"
                 image={petStoreImage}
                 items={["Dog Food & Treats", "Cat Toys & Beds", "Bird Cages", "Fish Tanks", "Hamster Wheels", "Pet Grooming"]}
@@ -120,7 +121,8 @@ const Index = () => {
             {/* McDonald's */}
             <div id="mcdonalds">
               <BusinessCard
-                title={<><i className="material-icons text-2xl mr-2">fastfood</i> McDonald's Cafe</>}
+                title="McDonald's Cafe"
+                icon="fastfood"
                 description="I'm lovin' it! Happy meals and golden treats!"
                 image={mcdonaldsImage}
                 items={["Happy Meals", "Big Mac", "Chicken McNuggets", "Apple Pies", "McFlurries", "Toy Surprises"]}
@@ -132,7 +134,8 @@ const Index = () => {
             {/* Starbucks */}
             <div id="starbucks">
               <BusinessCard
-                title={<><i className="material-icons text-2xl mr-2">local_cafe</i> Starbucks Corner</>}
+                title="Starbucks Corner"
+                icon="local_cafe"
                 description="Kid-friendly drinks and cozy treats!"
                 image={starbucksImage}
                 items={["Hot Chocolate", "Frappuccinos", "Cake Pops", "Cookies", "Warm Milk", "Special Cups"]}
@@ -144,7 +147,8 @@ const Index = () => {
             {/* Lego Store */}
             <div id="lego">
               <BusinessCard
-                title={<><i className="material-icons text-2xl mr-2">toys</i> Lego Wonderland</>}
+                title="Lego Wonderland"
+                icon="toys"
                 description="Build your dreams with endless possibilities!"
                 image={legoStoreImage}
                 items={["Lego City Sets", "Star Wars Legos", "Friends Collection", "Build Tables", "Mini Figures", "Custom Creations"]}

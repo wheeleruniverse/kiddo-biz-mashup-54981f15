@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 interface BusinessCardProps {
   title: string;
+  icon?: string;
   description: string;
   image: string;
   items: string[];
@@ -20,7 +21,7 @@ const variantStyles = {
   "lego": "bg-lego text-lego-foreground",
 };
 
-export function BusinessCard({ title, description, image, items, variant, className, onClick }: BusinessCardProps) {
+export function BusinessCard({ title, icon, description, image, items, variant, className, onClick }: BusinessCardProps) {
   return (
     <Card className={cn("overflow-hidden shadow-card hover:shadow-colorful transition-all duration-300 hover:scale-105", className)}>
       <div className="relative h-48 overflow-hidden">
@@ -30,7 +31,8 @@ export function BusinessCard({ title, description, image, items, variant, classN
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <CardTitle className="absolute bottom-4 left-4 text-white text-2xl font-bold">
+        <CardTitle className="absolute bottom-4 left-4 text-white text-2xl font-bold flex items-center">
+          {icon && <i className="material-icons text-2xl mr-2">{icon}</i>}
           {title}
         </CardTitle>
       </div>
