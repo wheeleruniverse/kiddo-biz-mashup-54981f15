@@ -142,9 +142,14 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
 
   const retakePhoto = () => {
     setCapturedPhoto(null);
-    setIsCapturing(true);
-    if (useWebCamera && !webCameraStream) {
-      startWebCamera();
+    if (useWebCamera) {
+      setIsCapturing(true);
+      if (!webCameraStream) {
+        startWebCamera();
+      }
+    } else {
+      // For Raspberry Pi camera, just reset to ready state
+      setIsCapturing(false);
     }
   };
 
