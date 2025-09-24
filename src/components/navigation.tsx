@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Camera } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { CartDrawer } from "@/components/ui/cart-drawer";
 import { useState } from "react";
@@ -23,6 +23,8 @@ export function Navigation() {
   const handleNavigation = (id: string) => {
     if (id === "hero") {
       navigate("/");
+    } else if (id === "happy-customers") {
+      navigate("/happy-customers");
     } else {
       navigate(`/business/${id}`);
     }
@@ -52,6 +54,17 @@ export function Navigation() {
                   {item.label}
                 </Button>
               ))}
+              
+              {/* Happy Customers Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleNavigation("happy-customers")}
+                className="text-sm hover:bg-accent text-pink-600 hover:text-pink-700"
+              >
+                <Camera className="mr-1 h-4 w-4" />
+                Happy Customers
+              </Button>
             </div>
             
             {/* Cart Button */}
