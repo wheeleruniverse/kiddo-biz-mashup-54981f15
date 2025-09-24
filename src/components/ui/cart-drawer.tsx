@@ -1,8 +1,10 @@
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { RaspberryPiCamera } from "@/components/ui/raspberry-pi-camera";
 import { useCart } from "@/contexts/CartContext";
-import { Plus, Minus, Trash2, X } from "lucide-react";
+import { Plus, Minus, Trash2, X, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 interface CartDrawerProps {
   open: boolean;
@@ -19,6 +21,8 @@ const variantStyles = {
 
 export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
   const { state, updateQuantity, removeItem, clearCart } = useCart();
+  const [showCamera, setShowCamera] = useState(false);
+  const [customerPhoto, setCustomerPhoto] = useState<string | null>(null);
 
   const handleCheckout = () => {
     if (state.items.length === 0) {
@@ -30,16 +34,37 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
       return;
     }
 
+    // Show camera for photo capture
+    setShowCamera(true);
+  };
+
+  const handlePhotoCaptured = (photoData: string) => {
+    setCustomerPhoto(photoData);
+    // Complete the checkout process
+    toast({
+      title: "🎉 Checkout Complete!",
+      description: `Thank you for your pretend purchase of $${state.total.toFixed(2)}! Your happy customer photo has been saved!`,
+    });
+    clearCart();
+    onOpenChange(false);
+    setShowCamera(false);
+    setCustomerPhoto(null);
+  };
+
+  const skipPhoto = () => {
     toast({
       title: "🎉 Checkout Complete!",
       description: `Thank you for your pretend purchase of $${state.total.toFixed(2)}!`,
     });
     clearCart();
     onOpenChange(false);
+    setShowCamera(false);
+    setCustomerPhoto(null);
   };
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
+    <>
+      <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="max-h-[80vh]">
         <DrawerHeader className="border-b border-border">
           <div className="flex items-center justify-between">
@@ -120,13 +145,21 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
               <Button variant="outline" onClick={clearCart} className="flex-1">
                 Clear Cart
               </Button>
-              <Button onClick={handleCheckout} className="flex-1 bg-primary text-primary-foreground">
-                <i className="material-icons mr-2">celebration</i> Pretend Checkout
-              </Button>
+               <Button onClick={handleCheckout} className="flex-1 bg-primary text-primary-foreground">
+                 <Camera className="mr-2 h-4 w-4" />
+                 Checkout & Photo
+               </Button>
             </div>
           </div>
         )}
       </DrawerContent>
     </Drawer>
+
+    <RaspberryPiCamera
+      open={showCamera}
+      onOpenChange={setShowCamera}
+      onPhotoCaptured={handlePhotoCaptured}
+    />
+    </>
   );
 }
