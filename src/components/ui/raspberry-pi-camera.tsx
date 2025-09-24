@@ -17,6 +17,7 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
   const [cameraStatus, setCameraStatus] = useState<CameraStatus | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
+  const [capturedPhotoFilename, setCapturedPhotoFilename] = useState<string | null>(null);
   const [useWebCamera, setUseWebCamera] = useState(false);
   const [webCameraStream, setWebCameraStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -26,6 +27,7 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     if (open) {
       // Reset state when dialog opens
       setCapturedPhoto(null);
+      setCapturedPhotoFilename(null);
       setIsCapturing(false);
       checkCameraStatus();
     } else {
@@ -93,6 +95,8 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
       const result = await CameraService.capturePhoto(filename);
       
       if (result.success && result.photoUrl) {
+        // Store the filename for potential deletion
+        setCapturedPhotoFilename(filename);
         // Convert the local photo to base64 for the parent component
         const response = await fetch(`http://localhost:3001${result.photoUrl}`);
         const blob = await response.blob();
@@ -143,8 +147,21 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     setIsCapturing(false);
   };
 
-  const retakePhoto = () => {
+  const retakePhoto = async () => {
+    // Delete the previously captured photo from server if it exists
+    if (capturedPhotoFilename) {
+      try {
+        await CameraService.deletePhoto(capturedPhotoFilename);
+        console.log('Previous photo deleted:', capturedPhotoFilename);
+      } catch (error) {
+        console.error('Failed to delete previous photo:', error);
+        // Don't show error to user, just log it
+      }
+    }
+    
     setCapturedPhoto(null);
+    setCapturedPhotoFilename(null);
+    
     if (useWebCamera) {
       setIsCapturing(true);
       if (!webCameraStream) {
@@ -184,12 +201,23 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     });
   };
 
-  const closeCamera = () => {
+  const closeCamera = async () => {
+    // Delete any unsaved photo when closing
+    if (capturedPhotoFilename) {
+      try {
+        await CameraService.deletePhoto(capturedPhotoFilename);
+        console.log('Unsaved photo deleted on close:', capturedPhotoFilename);
+      } catch (error) {
+        console.error('Failed to delete unsaved photo:', error);
+      }
+    }
+    
     if (webCameraStream) {
       webCameraStream.getTracks().forEach(track => track.stop());
       setWebCameraStream(null);
     }
     setCapturedPhoto(null);
+    setCapturedPhotoFilename(null);
     setIsCapturing(false);
     setUseWebCamera(false);
     onOpenChange(false);
