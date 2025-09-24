@@ -34,6 +34,25 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
       return;
     }
 
+    // Complete checkout without photo
+    toast({
+      title: "🎉 Checkout Complete!",
+      description: `Thank you for your pretend purchase of $${state.total.toFixed(2)}!`,
+    });
+    clearCart();
+    onOpenChange(false);
+  };
+
+  const handleCheckoutWithPhoto = () => {
+    if (state.items.length === 0) {
+      toast({
+        title: "Cart is empty!",
+        description: "Add some items before checking out.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Show camera for photo capture
     setShowCamera(true);
   };
@@ -60,6 +79,15 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
     onOpenChange(false);
     setShowCamera(false);
     setCustomerPhoto(null);
+  };
+
+  const handleCameraError = () => {
+    toast({
+      title: "Camera Unavailable",
+      description: "Proceeding with checkout without photo. You can always take a photo later!",
+      variant: "destructive",
+    });
+    skipPhoto();
   };
 
   return (
@@ -145,10 +173,13 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
               <Button variant="outline" onClick={clearCart} className="flex-1">
                 Clear Cart
               </Button>
-               <Button onClick={handleCheckout} className="flex-1 bg-primary text-primary-foreground">
-                 <Camera className="mr-2 h-4 w-4" />
-                 Checkout & Photo
-               </Button>
+              <Button onClick={handleCheckout} className="flex-1 bg-primary text-primary-foreground">
+                <i className="material-icons mr-2">celebration</i> Checkout
+              </Button>
+              <Button onClick={handleCheckoutWithPhoto} variant="outline" className="flex-1">
+                <Camera className="mr-2 h-4 w-4" />
+                Checkout & Photo
+              </Button>
             </div>
           </div>
         )}
@@ -159,6 +190,8 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
       open={showCamera}
       onOpenChange={setShowCamera}
       onPhotoCaptured={handlePhotoCaptured}
+      onSkip={skipPhoto}
+      onError={handleCameraError}
     />
     </>
   );

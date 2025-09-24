@@ -129,6 +129,35 @@ app.get('/api/photos', (req, res) => {
   });
 });
 
+// Delete a photo
+app.delete('/api/photos/:filename', (req, res) => {
+  const { filename } = req.params;
+  const photoPath = path.join(photosDir, filename);
+  
+  // Security check: ensure the filename doesn't contain path traversal
+  if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid filename'
+    });
+  }
+  
+  fs.unlink(photoPath, (err) => {
+    if (err) {
+      console.error('Photo deletion error:', err);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to delete photo'
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Photo deleted successfully'
+    });
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`📸 Raspberry Pi Camera API running on port ${PORT}`);
   console.log(`📸 Photos will be saved to: ${photosDir}`);

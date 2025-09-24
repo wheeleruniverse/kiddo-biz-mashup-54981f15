@@ -84,4 +84,19 @@ export class CameraService {
       };
     }
   }
+
+  static async deletePhoto(filename: string): Promise<{ success: boolean; message?: string; error?: string }> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/photos/${filename}`, {
+        method: 'DELETE',
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to delete photo:', error);
+      return {
+        success: false,
+        error: 'Failed to delete photo'
+      };
+    }
+  }
 }

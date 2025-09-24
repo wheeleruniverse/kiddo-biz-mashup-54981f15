@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Camera, Download, RefreshCw, Smile, Heart } from 'lucide-react';
+import { ArrowLeft, Camera, Download, RefreshCw, Smile, Heart, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CameraService, Photo } from '@/services/cameraService';
 import { toast } from '@/hooks/use-toast';
@@ -51,6 +51,34 @@ const HappyCustomers = () => {
       title: "Photo Downloaded! 📸",
       description: `${photo.filename} has been downloaded to your device.`,
     });
+  };
+
+  const deletePhoto = async (photo: Photo) => {
+    if (!window.confirm(`Are you sure you want to delete this photo? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const result = await CameraService.deletePhoto(photo.filename);
+      
+      if (result.success) {
+        toast({
+          title: "Photo Deleted! 🗑️",
+          description: "The photo has been removed from the gallery.",
+        });
+        // Reload photos to update the list
+        loadPhotos();
+      } else {
+        throw new Error(result.error || 'Failed to delete photo');
+      }
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      toast({
+        title: "Delete Failed",
+        description: "Failed to delete the photo. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatDate = (filename: string) => {
@@ -196,15 +224,25 @@ const HappyCustomers = () => {
                         <p className="text-xs text-muted-foreground">
                           {formatDate(photo.filename)}
                         </p>
-                        <Button
-                          onClick={() => downloadPhoto(photo)}
-                          variant="outline"
-                          size="sm"
-                          className="w-full"
-                        >
-                          <Download className="mr-2 h-3 w-3" />
-                          Save Photo
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => downloadPhoto(photo)}
+                            variant="outline"
+                            size="sm"
+                            className="flex-1"
+                          >
+                            <Download className="mr-2 h-3 w-3" />
+                            Download
+                          </Button>
+                          <Button
+                            onClick={() => deletePhoto(photo)}
+                            variant="outline"
+                            size="sm"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>

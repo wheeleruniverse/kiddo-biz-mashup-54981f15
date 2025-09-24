@@ -9,9 +9,11 @@ interface RaspberryPiCameraProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onPhotoCaptured: (photoData: string) => void;
+  onSkip?: () => void;
+  onError?: () => void;
 }
 
-export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured }: RaspberryPiCameraProps) {
+export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip, onError }: RaspberryPiCameraProps) {
   const [cameraStatus, setCameraStatus] = useState<CameraStatus | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
@@ -33,15 +35,17 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured }: Raspb
   }, [open, webCameraStream]);
 
   const checkCameraStatus = async () => {
-    const status = await CameraService.checkStatus();
-    setCameraStatus(status);
-    
-    if (!status.available) {
-      toast({
-        title: "Raspberry Pi Camera Not Available",
-        description: "Falling back to web camera. Make sure the camera service is running.",
-        variant: "destructive",
-      });
+    try {
+      const status = await CameraService.checkStatus();
+      setCameraStatus(status);
+      
+      if (!status.available) {
+        // Don't show error toast, just fall back to web camera
+        setUseWebCamera(true);
+      }
+    } catch (error) {
+      console.error('Camera status check failed:', error);
+      setCameraStatus({ available: false, error: 'Service unavailable' });
       setUseWebCamera(true);
     }
   };
@@ -62,11 +66,15 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured }: Raspb
       }
     } catch (err) {
       console.error('Error accessing web camera:', err);
-      toast({
-        title: "Web Camera Error",
-        description: "Unable to access web camera. Please check permissions.",
-        variant: "destructive",
-      });
+      if (onError) {
+        onError();
+      } else {
+        toast({
+          title: "Camera Unavailable",
+          description: "Unable to access any camera. Please check permissions.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -97,11 +105,15 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured }: Raspb
       }
     } catch (error) {
       console.error('Photo capture error:', error);
-      toast({
-        title: "Photo Capture Failed",
-        description: "Failed to capture photo with Raspberry Pi camera.",
-        variant: "destructive",
-      });
+      if (onError) {
+        onError();
+      } else {
+        toast({
+          title: "Photo Capture Failed",
+          description: "Failed to capture photo. Please try again.",
+          variant: "destructive",
+        });
+      }
       setIsCapturing(false);
     }
   };
@@ -125,12 +137,22 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured }: Raspb
     // Convert to base64
     const photoData = canvas.toDataURL('image/jpeg', 0.8);
     setCapturedPhoto(photoData);
+    setIsCapturing(false);
   };
 
   const retakePhoto = () => {
     setCapturedPhoto(null);
+    setIsCapturing(true);
     if (useWebCamera && !webCameraStream) {
       startWebCamera();
+    }
+  };
+
+  const skipPhoto = () => {
+    if (onSkip) {
+      onSkip();
+    } else {
+      onOpenChange(false);
     }
   };
 
@@ -177,6 +199,13 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured }: Raspb
             Take a photo to celebrate your purchase! This will be saved as a memory.
           </DialogDescription>
         </DialogHeader>
+
+        {/* Skip Button */}
+        <div className="flex justify-end">
+          <Button onClick={skipPhoto} variant="ghost" size="sm">
+            Skip Photo
+          </Button>
+        </div>
 
         <div className="space-y-4">
           {/* Camera Status */}
