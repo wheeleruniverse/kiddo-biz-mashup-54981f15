@@ -24,6 +24,9 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
 
   useEffect(() => {
     if (open) {
+      // Reset state when dialog opens
+      setCapturedPhoto(null);
+      setIsCapturing(false);
       checkCameraStatus();
     } else {
       // Clean up web camera stream when dialog closes
@@ -148,7 +151,7 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
         startWebCamera();
       }
     } else {
-      // For Raspberry Pi camera, just reset to ready state
+      // For Raspberry Pi camera, ensure we're in ready state
       setIsCapturing(false);
     }
   };
