@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from './button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './dialog';
-import { Camera, Download, RotateCcw, X, Wifi, WifiOff } from 'lucide-react';
+import { Camera, Download, RotateCcw, Wifi, WifiOff } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { CameraService, CameraStatus } from '@/services/cameraService';
 
@@ -18,10 +18,6 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
   const [isCapturing, setIsCapturing] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [capturedPhotoFilename, setCapturedPhotoFilename] = useState<string | null>(null);
-  const [useWebCamera, setUseWebCamera] = useState(false);
-  const [webCameraStream, setWebCameraStream] = useState<MediaStream | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (open) {
@@ -30,65 +26,21 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
       setCapturedPhotoFilename(null);
       setIsCapturing(false);
       checkCameraStatus();
-    } else {
-      // Clean up web camera stream when dialog closes
-      if (webCameraStream) {
-        webCameraStream.getTracks().forEach(track => track.stop());
-        setWebCameraStream(null);
-      }
     }
-  }, [open, webCameraStream]);
+  }, [open]);
 
   const checkCameraStatus = async () => {
     try {
       const status = await CameraService.checkStatus();
       setCameraStatus(status);
-      
-      if (!status.available) {
-        // Don't show error toast, just fall back to web camera
-        setUseWebCamera(true);
-      }
     } catch (error) {
       console.error('Camera status check failed:', error);
       setCameraStatus({ available: false, error: 'Service unavailable' });
-      setUseWebCamera(true);
     }
   };
 
-  const startWebCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: 'user' // Front camera for selfies
-        } 
-      });
-      
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        setWebCameraStream(stream);
-      }
-    } catch (err) {
-      console.error('Error accessing web camera:', err);
-      if (onError) {
-        onError();
-      } else {
-        toast({
-          title: "Camera Unavailable",
-          description: "Unable to access any camera. Please check permissions.",
-          variant: "destructive",
-        });
-      }
-    }
-  };
 
   const capturePhoto = async () => {
-    if (useWebCamera) {
-      captureWebPhoto();
-      return;
-    }
-
     setIsCapturing(true);
     try {
       const filename = `customer_photo_${Date.now()}.jpg`;
@@ -125,28 +77,6 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     }
   };
 
-  const captureWebPhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-
-    if (!context) return;
-
-    // Set canvas dimensions to match video
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    // Draw the video frame to canvas
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // Convert to base64
-    const photoData = canvas.toDataURL('image/jpeg', 0.8);
-    setCapturedPhoto(photoData);
-    setIsCapturing(false);
-  };
-
   const retakePhoto = async () => {
     // Delete the previously captured photo from server if it exists
     if (capturedPhotoFilename) {
@@ -161,16 +91,7 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     
     setCapturedPhoto(null);
     setCapturedPhotoFilename(null);
-    
-    if (useWebCamera) {
-      setIsCapturing(true);
-      if (!webCameraStream) {
-        startWebCamera();
-      }
-    } else {
-      // For Raspberry Pi camera, ensure we're in ready state
-      setIsCapturing(false);
-    }
+    setIsCapturing(false);
   };
 
   const skipPhoto = () => {
@@ -192,15 +113,6 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     }
   };
 
-  const switchToWebCamera = () => {
-    setUseWebCamera(true);
-    startWebCamera();
-    toast({
-      title: "Switched to Web Camera",
-      description: "Using your device's camera instead.",
-    });
-  };
-
   const closeCamera = async () => {
     // Delete any unsaved photo when closing
     if (capturedPhotoFilename) {
@@ -212,14 +124,9 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
       }
     }
     
-    if (webCameraStream) {
-      webCameraStream.getTracks().forEach(track => track.stop());
-      setWebCameraStream(null);
-    }
     setCapturedPhoto(null);
     setCapturedPhotoFilename(null);
     setIsCapturing(false);
-    setUseWebCamera(false);
     onOpenChange(false);
   };
 
@@ -245,14 +152,9 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
 
         <div className="space-y-4">
           {/* Camera Status */}
-          <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+          <div className="flex items-center justify-center p-3 bg-muted rounded-lg">
             <div className="flex items-center gap-2">
-              {useWebCamera ? (
-                <>
-                  <WifiOff className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm text-blue-700">Using Web Camera</span>
-                </>
-              ) : cameraStatus?.available ? (
+              {cameraStatus?.available ? (
                 <>
                   <Wifi className="h-4 w-4 text-green-500" />
                   <span className="text-sm text-green-700">Raspberry Pi Camera Connected</span>
@@ -264,67 +166,45 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
                 </>
               )}
             </div>
-            {!useWebCamera && !cameraStatus?.available && (
-              <Button onClick={switchToWebCamera} variant="outline" size="sm">
-                Use Web Camera
-              </Button>
-            )}
           </div>
 
           {/* Camera Interface */}
           {!capturedPhoto && (
             <div className="text-center py-8">
-              {useWebCamera && webCameraStream ? (
-                <div className="relative">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    className="w-full h-64 object-cover rounded-lg bg-gray-100"
-                  />
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                    <Button
-                      onClick={captureWebPhoto}
-                      size="lg"
-                      className="bg-primary text-primary-foreground rounded-full w-16 h-16"
-                    >
-                      <Camera className="h-6 w-6" />
-                    </Button>
+              <div className="space-y-4">
+                <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <Camera className="h-12 w-12 mx-auto text-gray-400 mb-2" />
+                    <p className="text-gray-600">Raspberry Pi Camera Ready</p>
+                    <p className="text-sm text-gray-500">Click capture when ready</p>
                   </div>
                 </div>
-              ) : (
-                <>
-                  <Camera className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-lg font-medium mb-2">
-                    {useWebCamera ? 'Web Camera Ready' : 'Raspberry Pi Camera Ready'}
+                
+                <Button
+                  onClick={capturePhoto}
+                  disabled={isCapturing || !cameraStatus?.available}
+                  size="lg"
+                  className="bg-primary text-primary-foreground"
+                >
+                  {isCapturing ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Capturing...
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="mr-2 h-4 w-4" />
+                      Capture Photo
+                    </>
+                  )}
+                </Button>
+                
+                {!cameraStatus?.available && (
+                  <p className="text-sm text-red-600 mt-2">
+                    Camera service is not available. Please check your Raspberry Pi setup.
                   </p>
-                  <p className="text-muted-foreground mb-4">
-                    {useWebCamera 
-                      ? 'Click the button below to start your device camera'
-                      : 'Click the button below to capture a photo with the Raspberry Pi camera'
-                    }
-                  </p>
-                  
-                  <Button
-                    onClick={useWebCamera ? startWebCamera : capturePhoto}
-                    disabled={isCapturing}
-                    size="lg"
-                    className="bg-primary text-primary-foreground"
-                  >
-                    {isCapturing ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Capturing...
-                      </>
-                    ) : (
-                      <>
-                        <Camera className="mr-2 h-4 w-4" />
-                        {useWebCamera ? 'Start Web Camera' : 'Capture Photo'}
-                      </>
-                    )}
-                  </Button>
-                </>
-              )}
+                )}
+              </div>
             </div>
           )}
 
@@ -363,7 +243,6 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
           )}
         </div>
 
-        <canvas ref={canvasRef} className="hidden" />
       </DialogContent>
     </Dialog>
   );
