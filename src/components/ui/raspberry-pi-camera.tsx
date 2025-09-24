@@ -16,6 +16,7 @@ interface RaspberryPiCameraProps {
 export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip, onError }: RaspberryPiCameraProps) {
   const [cameraStatus, setCameraStatus] = useState<CameraStatus | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [capturedPhotoFilename, setCapturedPhotoFilename] = useState<string | null>(null);
 
@@ -25,6 +26,7 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
       setCapturedPhoto(null);
       setCapturedPhotoFilename(null);
       setIsCapturing(false);
+      setIsPreviewing(false);
       checkCameraStatus();
     }
   }, [open]);
@@ -37,6 +39,10 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
       console.error('Camera status check failed:', error);
       setCameraStatus({ available: false, error: 'Service unavailable' });
     }
+  };
+
+  const startPreview = () => {
+    setIsPreviewing(true);
   };
 
 
@@ -92,6 +98,7 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     setCapturedPhoto(null);
     setCapturedPhotoFilename(null);
     setIsCapturing(false);
+    setIsPreviewing(true);
   };
 
   const skipPhoto = () => {
@@ -127,6 +134,7 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
     setCapturedPhoto(null);
     setCapturedPhotoFilename(null);
     setIsCapturing(false);
+    setIsPreviewing(false);
     onOpenChange(false);
   };
 
@@ -171,40 +179,86 @@ export function RaspberryPiCamera({ open, onOpenChange, onPhotoCaptured, onSkip,
           {/* Camera Interface */}
           {!capturedPhoto && (
             <div className="text-center py-8">
-              <div className="space-y-4">
-                <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <Camera className="h-12 w-12 mx-auto text-gray-400 mb-2" />
-                    <p className="text-gray-600">Raspberry Pi Camera Ready</p>
-                    <p className="text-sm text-gray-500">Click capture when ready</p>
+              {isPreviewing ? (
+                // Preview Mode
+                <div className="space-y-4">
+                  <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="text-center">
+                      <Camera className="h-12 w-12 mx-auto text-gray-400 mb-2" />
+                      <p className="text-gray-600">Raspberry Pi Camera Ready</p>
+                      <p className="text-sm text-gray-500">Click capture when ready</p>
+                    </div>
+                  </div>
+                  
+                  <Button
+                    onClick={capturePhoto}
+                    disabled={isCapturing || !cameraStatus?.available}
+                    size="lg"
+                    className="bg-primary text-primary-foreground"
+                  >
+                    {isCapturing ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Capturing...
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="mr-2 h-4 w-4" />
+                        Capture Photo
+                      </>
+                    )}
+                  </Button>
+                  
+                  {!cameraStatus?.available && (
+                    <p className="text-sm text-red-600 mt-2">
+                      Camera service is not available. Please check your Raspberry Pi setup.
+                    </p>
+                  )}
+                  
+                  {/* Preview Controls */}
+                  <div className="flex gap-2 justify-center">
+                    <Button
+                      onClick={() => setIsPreviewing(false)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      onClick={skipPhoto}
+                      variant="ghost"
+                      size="sm"
+                    >
+                      Skip Photo
+                    </Button>
                   </div>
                 </div>
-                
-                <Button
-                  onClick={capturePhoto}
-                  disabled={isCapturing || !cameraStatus?.available}
-                  size="lg"
-                  className="bg-primary text-primary-foreground"
-                >
-                  {isCapturing ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Capturing...
-                    </>
-                  ) : (
-                    <>
-                      <Camera className="mr-2 h-4 w-4" />
-                      Capture Photo
-                    </>
-                  )}
-                </Button>
-                
-                {!cameraStatus?.available && (
-                  <p className="text-sm text-red-600 mt-2">
-                    Camera service is not available. Please check your Raspberry Pi setup.
+              ) : (
+                // Ready Mode
+                <div className="space-y-4">
+                  <Camera className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                  <p className="text-lg font-medium mb-2">Raspberry Pi Camera Ready</p>
+                  <p className="text-muted-foreground mb-4">
+                    Click below to start photo capture
                   </p>
-                )}
-              </div>
+                  
+                  <Button
+                    onClick={startPreview}
+                    disabled={!cameraStatus?.available}
+                    size="lg"
+                    className="bg-primary text-primary-foreground"
+                  >
+                    <Camera className="mr-2 h-4 w-4" />
+                    Start Photo Capture
+                  </Button>
+                  
+                  {!cameraStatus?.available && (
+                    <p className="text-sm text-red-600 mt-2">
+                      Camera service is not available. Please check your Raspberry Pi setup.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
 

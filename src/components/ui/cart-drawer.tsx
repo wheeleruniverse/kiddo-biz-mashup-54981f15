@@ -170,15 +170,15 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
             </div>
             
             <div className="flex gap-2">
-              <Button variant="outline" onClick={clearCart} className="flex-1">
-                Clear Cart
-              </Button>
               <Button onClick={handleCheckout} className="flex-1 bg-primary text-primary-foreground">
                 <i className="material-icons mr-2">celebration</i> Checkout
               </Button>
               <Button onClick={handleCheckoutWithPhoto} variant="outline" className="flex-1">
                 <Camera className="mr-2 h-4 w-4" />
                 Checkout & Photo
+              </Button>
+              <Button variant="outline" onClick={clearCart} className="flex-1">
+                Clear Cart
               </Button>
             </div>
           </div>

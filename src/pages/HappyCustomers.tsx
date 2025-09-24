@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Camera, Download, RefreshCw, Smile, Heart, Trash2, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Camera, Download, RefreshCw, Smile, Heart, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CameraService, Photo } from '@/services/cameraService';
 import { toast } from '@/hooks/use-toast';
@@ -81,36 +81,6 @@ const HappyCustomers = () => {
     }
   };
 
-  const retakePhoto = async (photo: Photo) => {
-    if (!window.confirm(`Are you sure you want to retake this photo? The current photo will be deleted and you'll be taken to the camera.`)) {
-      return;
-    }
-
-    try {
-      // Delete the current photo
-      const result = await CameraService.deletePhoto(photo.filename);
-      
-      if (result.success) {
-        toast({
-          title: "Photo Deleted! 📸",
-          description: "The photo has been removed. You can now take a new one!",
-        });
-        // Reload photos to update the list
-        loadPhotos();
-        // Navigate to home to take a new photo
-        navigate("/");
-      } else {
-        throw new Error(result.error || 'Failed to delete photo');
-      }
-    } catch (error) {
-      console.error('Error deleting photo for retake:', error);
-      toast({
-        title: "Retake Failed",
-        description: "Failed to delete the photo. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
 
   const formatDate = (filename: string) => {
     // Extract timestamp from filename (customer_photo_1234567890.jpg)
@@ -264,14 +234,6 @@ const HappyCustomers = () => {
                           >
                             <Download className="mr-2 h-3 w-3" />
                             Download
-                          </Button>
-                          <Button
-                            onClick={() => retakePhoto(photo)}
-                            variant="outline"
-                            size="sm"
-                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                          >
-                            <RotateCcw className="h-3 w-3" />
                           </Button>
                           <Button
                             onClick={() => deletePhoto(photo)}
