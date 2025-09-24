@@ -42,13 +42,14 @@ First, make sure your camera is properly configured following the [Arducam guide
 1. **Install server dependencies:**
    ```bash
    cd /path/to/your/project
-   npm install express cors
-   # OR install from the server-package.json
-   npm install --save express cors
+   npm install
+   # The dependencies are already added to package.json
    ```
 
 2. **Start the camera API server:**
    ```bash
+   npm run server
+   # OR
    node server.js
    ```
 
@@ -129,10 +130,10 @@ For production, consider:
 
 ```bash
 # 1. Install dependencies
-npm install express cors
+npm install
 
 # 2. Start the camera server
-node server.js
+npm run server
 
 # 3. In another terminal, start your React app
 npm run dev

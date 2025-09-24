@@ -2,6 +2,7 @@
   "name": "raspberry-pi-camera-api",
   "version": "1.0.0",
   "description": "API server for Raspberry Pi camera integration",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
