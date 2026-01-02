@@ -51,6 +51,18 @@ All colors MUST be HSL.
     --pet-store: 280 100% 70%;
     --pet-store-foreground: 0 0% 100%;
 
+    --rivertown: 200 80% 50%;
+    --rivertown-foreground: 0 0% 100%;
+
+    --red-robin: 355 85% 50%;
+    --red-robin-foreground: 0 0% 100%;
+
+    --annas-house: 20 90% 60%;
+    --annas-house-foreground: 0 0% 100%;
+
+    --macys: 350 80% 45%;
+    --macys-foreground: 0 0% 100%;
+
     --gradient-rainbow: linear-gradient(135deg, hsl(280 100% 70%), hsl(220 100% 60%), hsl(150 80% 60%), hsl(45 100% 60%), hsl(25 100% 65%));
     --gradient-hero: linear-gradient(135deg, hsl(280 100% 85%), hsl(220 100% 85%));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(240 20% 98%));

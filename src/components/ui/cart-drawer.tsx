@@ -14,9 +14,13 @@ interface CartDrawerProps {
 const variantStyles = {
   "pet-store": "bg-pet-store text-pet-store-foreground",
   "burger-king": "bg-burger-king text-burger-king-foreground",
-  "mcdonalds": "bg-mcdonalds text-mcdonalds-foreground", 
+  "mcdonalds": "bg-mcdonalds text-mcdonalds-foreground",
   "starbucks": "bg-starbucks text-starbucks-foreground",
   "lego": "bg-lego text-lego-foreground",
+  "rivertown": "bg-rivertown text-rivertown-foreground",
+  "red-robin": "bg-red-robin text-red-robin-foreground",
+  "annas-house": "bg-annas-house text-annas-house-foreground",
+  "macys": "bg-macys text-macys-foreground",
 };
 
 export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {

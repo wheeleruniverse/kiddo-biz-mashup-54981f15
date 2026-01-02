@@ -13,6 +13,10 @@ import burgerKingImage from "@/assets/burger-king.jpg";
 import mcdonaldsImage from "@/assets/mcdonalds.jpg";
 import starbucksImage from "@/assets/starbucks.jpg";
 import legoStoreImage from "@/assets/lego-store.jpg";
+import rivertownImage from "@/assets/rivertown.jpg";
+import redRobinImage from "@/assets/red-robin.jpg";
+import annasHouseImage from "@/assets/annas-house.jpg";
+import macysImage from "@/assets/macys.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -154,6 +158,58 @@ const Index = () => {
                 items={["Lego City Sets", "Star Wars Legos", "Friends Collection", "Build Tables", "Mini Figures", "Custom Creations"]}
                 variant="lego"
                 onClick={() => navigate("/business/lego")}
+              />
+            </div>
+
+            {/* RiverTown Crossing */}
+            <div id="rivertown">
+              <BusinessCard
+                title="RiverTown Crossing"
+                icon="shopping_bag"
+                description="The ultimate shopping and dining destination!"
+                image={rivertownImage}
+                items={["Kohls", "Toys R Us", "Panda Express", "Chipotle", "McDonald's", "Food Court"]}
+                variant="rivertown"
+                onClick={() => navigate("/business/rivertown")}
+              />
+            </div>
+
+            {/* Red Robin */}
+            <div id="red-robin">
+              <BusinessCard
+                title="Red Robin"
+                icon="restaurant_menu"
+                description="Yummm! Gourmet burgers and bottomless fun!"
+                image={redRobinImage}
+                items={["Gourmet Burgers", "Bottomless Fries", "Chicken Sandwich", "Freckled Lemonade", "Ice Cream", "Mac & Cheese"]}
+                variant="red-robin"
+                onClick={() => navigate("/business/red-robin")}
+              />
+            </div>
+
+            {/* Anna's House */}
+            <div id="annas-house">
+              <BusinessCard
+                title="Anna's House"
+                icon="breakfast_dining"
+                description="Breakfast and brunch worth waking up for!"
+                image={annasHouseImage}
+                items={["Pancakes", "Waffles", "Omelets", "French Toast", "Fresh Fruit", "Hot Chocolate"]}
+                variant="annas-house"
+                onClick={() => navigate("/business/annas-house")}
+              />
+            </div>
+
+            {/* Macy's */}
+            <div id="macys">
+              <BusinessCard
+                title="Macy's"
+                icon="local_florist"
+                description="The Fragrance Destination - Smell amazing!"
+                image={macysImage}
+                items={["Perfumes", "Colognes", "Body Sprays", "Candles", "Bath Sets", "Fragrance Workshop"]}
+                variant="macys"
+                onClick={() => navigate("/business/macys")}
               />
             </div>
 

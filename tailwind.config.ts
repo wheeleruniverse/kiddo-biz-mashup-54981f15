@@ -67,6 +67,22 @@ export default {
           DEFAULT: "hsl(var(--pet-store))",
           foreground: "hsl(var(--pet-store-foreground))",
         },
+        "rivertown": {
+          DEFAULT: "hsl(var(--rivertown))",
+          foreground: "hsl(var(--rivertown-foreground))",
+        },
+        "red-robin": {
+          DEFAULT: "hsl(var(--red-robin))",
+          foreground: "hsl(var(--red-robin-foreground))",
+        },
+        "annas-house": {
+          DEFAULT: "hsl(var(--annas-house))",
+          foreground: "hsl(var(--annas-house-foreground))",
+        },
+        "macys": {
+          DEFAULT: "hsl(var(--macys))",
+          foreground: "hsl(var(--macys-foreground))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
